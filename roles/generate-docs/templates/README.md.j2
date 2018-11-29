@@ -80,7 +80,7 @@ docker create \
   -v {{ item.vol_host_path }}:{{ item.vol_path }} \
 {% endfor %}
 {% endif %}
-  --restart unless-stopped
+  --restart unless-stopped \
   {{ lsio_project_name_short }}/{{ project_name }}
 ```
 
