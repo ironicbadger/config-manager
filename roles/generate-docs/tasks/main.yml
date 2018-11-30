@@ -20,17 +20,38 @@
     path: "readme/{{ project_name }}"
     state: directory
 
-- name: write readme file
-  when: lookup('env', 'LOCAL') != "true"
+- name: write readme file full template
+  when: 
+    - lookup('env', 'LOCAL') != "true"
+    - full_custom_readme is not defined
   template:
     src: ../templates/README.md.j2
     dest: "readme/{{ project_name }}/README.md"
   delegate_to: localhost
 
-- name: write readme file local
-  when: lookup('env', 'LOCAL') == "true"
+- name: write readme file local full template
+  when: 
+    - lookup('env', 'LOCAL') == "true"
+    - full_custom_readme is not defined
   template:
     src: ../templates/README.md.j2
     dest: "/tmp/GENERATED.md"
   delegate_to: localhost
 
+- name: write readme file custom
+  when: 
+    - lookup('env', 'LOCAL') != "true"
+    - full_custom_readme is defined
+  template:
+    src: ../templates/CUSTOM.md.j2
+    dest: "readme/{{ project_name }}/README.md"
+  delegate_to: localhost
+
+- name: write readme file local custom
+  when: 
+    - lookup('env', 'LOCAL') == "true"
+    - full_custom_readme is defined
+  template:
+    src: ../templates/CUSTOM.md.j2
+    dest: "/tmp/GENERATED.md"
+  delegate_to: localhost
