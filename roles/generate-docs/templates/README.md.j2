@@ -104,8 +104,10 @@ services:
 {% if param_usage_include_net %}
     network_mode: {{ param_net }}
 {% endif %}
-{% if common_param_env_vars_enabled %}
+{% if common_param_env_vars_enabled or param_usage_include_env %}
     environment:
+{% endif %}
+{% if common_param_env_vars_enabled %}
 {% for item in common_param_env_vars %}
       - {{ item.env_var }}={{ item.env_value }}
 {% endfor %}
