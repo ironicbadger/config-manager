@@ -55,3 +55,9 @@
     src: ../templates/CUSTOM.md.j2
     dest: "/tmp/GENERATED.md"
   delegate_to: localhost
+
+- name: Allow non root host to delete temp files
+  when:
+    - lookup('env', 'LOCAL') != "true"
+  command: chmod -R 777 /ansible/readme
+  delegate_to: localhost
