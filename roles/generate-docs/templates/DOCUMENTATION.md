@@ -1,0 +1,205 @@
+# [{{ lsio_project_name_short }}/{{ project_name }}]({{ project_lsio_github_repo_url }})
+[![]({{ lsio_shieldsio_discord }})]({{ lsio_discord_url }})
+[![]({{ lsio_microbadger_badge_version_url }}/{{ project_name }}.svg)]({{ lsio_microbadger_image_url }}/{{ project_name }} "{{ lsio_microbadger_link_desc }}")
+[![]({{ lsio_microbadger_badge_image_url }}/{{ project_name }}.svg)]({{ lsio_microbadger_image_url }}/{{ project_name }} "{{ lsio_microbadger_link_desc }}")
+![Docker Pulls]({{ lsio_shieldsio_pull_count_url }}/{{ project_name }}.svg)
+![Docker Stars]({{ lsio_shieldsio_stars_count_url }}/{{ project_name }}.svg)
+
+{{ project_blurb }}
+{% if project_blurb_optional_extras_enabled %}
+{% for item in project_blurb_optional_extras %}
+* {{ item }}
+{% endfor %}
+{% endif %}
+
+## Supported Architectures
+
+Our images support multiple architectures such as `x86-64`, `arm64` and `armhf`. We utilise the docker manifest for multi-platform awareness. More information is available from docker [here](https://github.com/docker/distribution/blob/master/docs/spec/manifest-v2-2.md#manifest-list). 
+
+The architectures supported by this image are:
+
+| Architecture | Tag |
+| :----: | --- |
+{% for item in available_architectures %}
+| {{ item.arch }} | {{ item.tag }} |
+{% endfor %}
+
+## Usage
+
+Here are some example snippets to help you get started creating a container from this image.
+
+### docker
+
+```
+docker create \
+  --name={{ param_container_name }} \
+{% if param_usage_include_net %}
+  --net={{ param_net }} \
+{% endif %}
+{% if common_param_env_vars_enabled %}
+{% for item in common_param_env_vars %}
+  -e {{ item.env_var }}={{ item.env_value }} \
+{% endfor %}
+{% endif %}
+{% if param_usage_include_env %}
+{% for item in param_env_vars %}
+  -e {{ item.env_var }}={{ item.env_value }} \
+{% endfor %}
+{% endif %}
+{% if param_usage_include_ports %}
+{% for item in param_ports %}
+  -p {{ item.external_port }}:{{ item.internal_port }} \
+{% endfor %}
+{% endif %}
+{% if param_usage_include_vols %}
+{% for item in param_volumes %}
+  -v {{ item.vol_host_path }}:{{ item.vol_path }} \
+{% endfor %}
+{% endif %}
+  --restart unless-stopped \
+  {{ lsio_project_name_short }}/{{ project_name }}
+```
+
+{% if optional_block_1 %}
+{% for item in optional_block_1_items %}
+{{ item }}
+{% endfor %}
+{% endif %}
+
+### docker-compose
+
+Compatible with docker-compose v2 schemas.
+
+```
+{% if not custom_compose is defined %}---
+version: "2"
+services:
+  {{ project_name }}:
+    image: {{ lsio_project_name_short }}/{{ project_name }}
+    container_name: {{ project_name }}
+{% if param_usage_include_net %}
+    network_mode: {{ param_net }}
+{% endif %}
+{% if common_param_env_vars_enabled or param_usage_include_env %}
+    environment:
+{% endif %}
+{% if common_param_env_vars_enabled %}
+{% for item in common_param_env_vars %}
+      - {{ item.env_var }}={{ item.env_value }}
+{% endfor %}
+{% endif %}
+{% if param_usage_include_env %}
+{% for item in param_env_vars %}
+      - {{ item.env_var }}={{ item.env_value }}
+{% endfor %}
+{% endif %}
+{% if param_usage_include_vols %}
+    volumes:
+{% for item in param_volumes %}
+      - {{ item.vol_host_path }}:{{ item.vol_path }}
+{% endfor %}
+{% endif %}
+{% if param_usage_include_ports %}
+    ports:
+{% for item in param_ports %}
+      - {{ item.external_port }}:{{ item.internal_port }}
+{% endfor %}
+{% endif %}
+    mem_limit: 4096m
+    restart: unless-stopped{% else %}{{ custom_compose }}{% endif %}
+
+```
+
+## Parameters
+
+Docker images are configured using parameters passed at runtime (such as those above). These parameters are separated by a colon and indicate `<external>:<internal>` respectively. For example, `-p 8080:80` would expose port `80` from inside the container to be accessible from the host's IP on port `8080` outside the container.
+
+### Ports (`-p`)
+
+| Parameter | Function |
+| :----: | --- |
+{% if param_usage_include_net %}
+| `--net={{ param_net }}` | {{ param_net_desc }} |
+{% endif %}
+{% if param_usage_include_ports %}
+{% for item in param_ports %}
+| `-p {{ item.internal_port }}` | {{ item.port_desc }} |
+{% endfor %}
+{% endif %}
+
+### Environment Variables (`-e`)
+
+| Env | Function |
+| :----: | --- |
+{% if common_param_env_vars_enabled %}
+{% for item in common_param_env_vars %}
+| `{{ item.env_var }}={{ item.env_value }}` | {{ item.desc }} |
+{% endfor %}
+{% endif %}
+{% if param_usage_include_env %}
+{% for item in param_env_vars %}
+| `-e {{ item.env_var }}={{ item.env_value }}` | {{ item.desc }} |
+{% endfor %}
+{% endif %}
+
+### Volume Mappings (`-v`)
+
+| Volume | Function |
+| :----: | --- |
+{% if param_usage_include_vols %}
+{% for item in param_volumes %}
+| `{{ item.vol_path }}` | {{ item.desc }} |
+{% endfor %}
+{% endif %}
+
+{% if optional_parameters is defined %}
+## Optional Parameters
+
+{{ optional_parameters }}
+
+{% endif %}
+{% if common_param_env_vars_enabled %}
+
+## User / Group Identifiers
+
+When using volumes (`-v` flags), permissions issues can arise between the host OS and the container, we avoid this issue by allowing you to specify the user `PUID` and group `PGID`.
+
+Ensure any volume directories on the host are owned by the same user you specify and any permissions issues will vanish like magic.
+
+In this instance `PUID=1001` and `PGID=1001`, to find yours use `id user` as below:
+
+```
+  $ id username
+    uid=1001(dockeruser) gid=1001(dockergroup) groups=1001(dockergroup)
+```
+{% endif %}
+
+{% if app_setup_block_enabled %}
+## Application Setup
+
+{{ app_setup_block }}
+{% endif %}
+
+{% if nginx_reverse_proxy_snippet_enabled %}
+## Reverse Proxy Snippet
+
+This snippet has been tested with {{ lsio_project_name|capitalize}}'s [Let's Encrypt reverse proxy](https://github.com/linuxserver/docker-letsencrypt) container.
+{{ nginx_reverse_proxy_block }}
+{% endif %}
+
+## Support Info
+
+* Shell access whilst the container is running: 
+  * `docker exec -it {{ project_name }} /bin/bash`
+* To monitor the logs of the container in realtime: 
+  * `docker logs -f {{ project_name }}`
+* Container version number 
+  * `docker inspect -f {% raw %}'{{ index .Config.Labels "build_version" }}'{% endraw %} {{ project_name }}`
+* Image version number
+  * `docker inspect -f {% raw %}'{{ index .Config.Labels "build_version" }}'{% endraw %} {{ lsio_project_name_short }}/{{ project_name }}`
+
+## Versions
+
+{% for item in changelogs %}
+* **{{ item.date }}** - {{ item.desc }}
+{% endfor %}
