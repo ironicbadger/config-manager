@@ -70,7 +70,7 @@ docker create \
 
 Compatible with docker-compose v2 schemas.
 
-```
+```yaml
 {% if not custom_compose is defined %}---
 version: "2"
 services:
