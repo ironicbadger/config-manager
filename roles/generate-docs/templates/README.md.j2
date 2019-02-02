@@ -26,6 +26,8 @@ TLDR: Multi-arch support is changing from multiple repos to one repo per contain
 [![]({{ lsio_microbadger_badge_image_url }}/{{ project_name }}.svg)]({{ lsio_microbadger_image_url }}/{{ project_name }} "{{ lsio_microbadger_link_desc }}")
 ![Docker Pulls]({{ lsio_shieldsio_pull_count_url }}/{{ project_name }}.svg)
 ![Docker Stars]({{ lsio_shieldsio_stars_count_url }}/{{ project_name }}.svg)
+[![Build Status]({{ lsio_ci_url }}/buildStatus/icon?job=Docker-Pipeline-Builders/docker-{{ project_name }}/master)]({{ lsio_ci_url }}/job/Docker-Pipeline-Builders/job/docker-{{ project_name }}/job/master/)
+[![]({{ lsio_object_url }}/linuxserver/{{ project_name }}/latest/badge.svg)]({{ lsio_object_url }}/linuxserver/{{ project_name }}/latest/index.html)
 
 {{ project_blurb }}
 {% if project_blurb_optional_extras_enabled %}
@@ -40,6 +42,8 @@ TLDR: Multi-arch support is changing from multiple repos to one repo per contain
 
 Our images support multiple architectures such as `x86-64`, `arm64` and `armhf`. We utilise the docker manifest for multi-platform awareness. More information is available from docker [here](https://github.com/docker/distribution/blob/master/docs/spec/manifest-v2-2.md#manifest-list). 
 
+Simply pulling `{{ lsio_project_name_short }}/{{ project_name }}` should retrieve the correct image for your arch, but you can also pull specific arch images via tags.
+
 The architectures supported by this image are:
 
 | Architecture | Tag |
@@ -47,6 +51,18 @@ The architectures supported by this image are:
 {% for item in available_architectures %}
 | {{ item.arch }} | {{ item.tag }} |
 {% endfor %}
+
+{% if development_versions is defined %}
+## Version Tags
+
+This image provides various versions that are available via tags. `latest` tag usually provides the latest stable version. Others are considered under development and caution must be exercised when using them.
+
+| Tag | Description |
+| :----: | --- |
+{% for item in development_versions_items %}
+| {{ item.tag }} | {{ item.desc }} |
+{% endfor %}
+{% endif %}
 
 ## Usage
 
