@@ -62,7 +62,7 @@
     - full_custom_readme is not defined
   template:
     src: ../templates/DOCUMENTATION.md.j2
-    dest: "readme/{{ project_name }}/DOCUMENTATION.md"
+    dest: "readme/{{ project_name }}/docker-{{ project_name }}.md"
   delegate_to: localhost
 
 - name: write gitbook file local full template
@@ -80,7 +80,7 @@
     - full_custom_readme is defined
   template:
     src: ../templates/DOCUMENTATION-CUSTOM.md.j2
-    dest: "readme/{{ project_name }}/DOCUMENTATION.md"
+    dest: "readme/{{ project_name }}/docker-{{ project_name }}.md"
   delegate_to: localhost
 
 - name: write gitbook file local custom
