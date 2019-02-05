@@ -21,7 +21,7 @@
     state: directory
 
 - name: write readme file full template
-  when: 
+  when:
     - lookup('env', 'LOCAL') != "true"
     - full_custom_readme is not defined
   template:
@@ -30,7 +30,7 @@
   delegate_to: localhost
 
 - name: write readme file local full template
-  when: 
+  when:
     - lookup('env', 'LOCAL') == "true"
     - full_custom_readme is not defined
   template:
@@ -39,7 +39,7 @@
   delegate_to: localhost
 
 - name: write readme file custom
-  when: 
+  when:
     - lookup('env', 'LOCAL') != "true"
     - full_custom_readme is defined
   template:
@@ -48,12 +48,48 @@
   delegate_to: localhost
 
 - name: write readme file local custom
-  when: 
+  when:
     - lookup('env', 'LOCAL') == "true"
     - full_custom_readme is defined
   template:
     src: ../templates/CUSTOM.md.j2
     dest: "/tmp/GENERATED.md"
+  delegate_to: localhost
+
+- name: write gitbook file full template
+  when:
+    - lookup('env', 'LOCAL') != "true"
+    - full_custom_readme is not defined
+  template:
+    src: ../templates/DOCUMENTATION.md.j2
+    dest: "readme/{{ project_name }}/docker-{{ project_name }}.md"
+  delegate_to: localhost
+
+- name: write gitbook file local full template
+  when:
+    - lookup('env', 'LOCAL') == "true"
+    - full_custom_readme is not defined
+  template:
+    src: ../templates/DOCUMENTATION.md.j2
+    dest: "/tmp/GENERATED-GITBOOK.md"
+  delegate_to: localhost
+
+- name: write gitbook file custom
+  when:
+    - lookup('env', 'LOCAL') != "true"
+    - full_custom_readme is defined
+  template:
+    src: ../templates/DOCUMENTATION-CUSTOM.md.j2
+    dest: "readme/{{ project_name }}/docker-{{ project_name }}.md"
+  delegate_to: localhost
+
+- name: write gitbook file local custom
+  when:
+    - lookup('env', 'LOCAL') == "true"
+    - full_custom_readme is defined
+  template:
+    src: ../templates/DOCUMENTATION-CUSTOM.md.j2
+    dest: "/tmp/GENERATED-GITBOOK.md"
   delegate_to: localhost
 
 - name: Allow non root host to delete temp files
