@@ -377,6 +377,40 @@ Below are the instructions for updating containers:
   * or update a single container: `docker-compose up -d {{ project_name }}`
 * You can also remove the old dangling images: `docker image prune`
 
+## Building locally
+
+If you want to make local modifications to these images for development purposes or just to customize the logic: 
+```
+git clone https://github.com/linuxserver/docker-{{ project_name }}.git
+cd docker-{{ project_name }}
+docker build \
+  --no-cache \
+  --pull \
+  -t {{ lsio_project_name_short }}/{{ project_name }}:latest .
+```
+
+The ARM variants can be built on x86_64 hardware using `multiarch/qemu-user-static`
+```
+docker run --rm --privileged multiarch/qemu-user-static:register --reset
+```
+
+Once registered to build for armhf:
+```
+docker build \
+  --no-cache \
+  --pull \
+  -f Dockerfile.armhf \
+  -t {{ lsio_project_name_short }}/{{ project_name }}:arm32v7-latest .
+```
+arm64:
+```
+docker build \
+  --no-cache \ 
+  --pull \
+  -f Dockerfile.aarch64 \
+  -t {{ lsio_project_name_short }}/{{ project_name }}:arm64v8-latest .
+```
+
 ## Versions
 
 {% for item in changelogs %}
