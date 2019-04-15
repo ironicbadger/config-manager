@@ -361,12 +361,13 @@ Below are the instructions for updating containers:
 * Start the new container: `docker start {{ project_name }}`
 * You can also remove the old dangling images: `docker image prune`
 
-### Via Taisun auto-updater (especially useful if you don't remember the original parameters)
-* Pull the latest image at its tag and replace it with the same env variables in one shot:
+### Via Watchtower auto-updater (especially useful if you don't remember the original parameters)
+* Pull the latest image at its tag and replace it with the same env variables in one run:
   ```
   docker run --rm \
-  -v /var/run/docker.sock:/var/run/docker.sock taisun/updater \
-  --oneshot {{ project_name }}
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  containrrr/watchtower
+  --run-once {{ project_name }}
   ```
 * You can also remove the old dangling images: `docker image prune`
 
