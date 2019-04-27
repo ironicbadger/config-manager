@@ -361,6 +361,13 @@ Below are the instructions for updating containers:
 * Start the new container: `docker start {{ project_name }}`
 * You can also remove the old dangling images: `docker image prune`
 
+### Via Docker Compose
+* Update all images: `docker-compose pull`
+  * or update a single image: `docker-compose pull {{ project_name }}`
+* Let compose update all containers as necessary: `docker-compose up -d`
+  * or update a single container: `docker-compose up -d {{ project_name }}`
+* You can also remove the old dangling images: `docker image prune`
+
 ### Via Watchtower auto-updater (especially useful if you don't remember the original parameters)
 * Pull the latest image at its tag and replace it with the same env variables in one run:
   ```
@@ -369,13 +376,6 @@ Below are the instructions for updating containers:
   containrrr/watchtower
   --run-once {{ project_name }}
   ```
-* You can also remove the old dangling images: `docker image prune`
-
-### Via Docker Compose
-* Update all images: `docker-compose pull`
-  * or update a single image: `docker-compose pull {{ project_name }}`
-* Let compose update all containers as necessary: `docker-compose up -d`
-  * or update a single container: `docker-compose up -d {{ project_name }}`
 * You can also remove the old dangling images: `docker image prune`
 
 ## Building locally
@@ -395,22 +395,7 @@ The ARM variants can be built on x86_64 hardware using `multiarch/qemu-user-stat
 docker run --rm --privileged multiarch/qemu-user-static:register --reset
 ```
 
-Once registered to build for armhf:
-```
-docker build \
-  --no-cache \
-  --pull \
-  -f Dockerfile.armhf \
-  -t {{ lsio_project_name_short }}/{{ project_name }}:arm32v7-latest .
-```
-arm64:
-```
-docker build \
-  --no-cache \ 
-  --pull \
-  -f Dockerfile.aarch64 \
-  -t {{ lsio_project_name_short }}/{{ project_name }}:arm64v8-latest .
-```
+Once registered you can define the dockerfile to use with `-f Dockerfile.aarch64`.
 
 ## Versions
 
