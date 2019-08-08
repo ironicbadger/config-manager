@@ -1,12 +1,12 @@
 # [{{ lsio_project_name_short }}/{{ project_name }}]({{ project_lsio_github_repo_url }})
 
-[![]({{ lsio_shieldsio_discord }})]({{ lsio_discord_url }})
-[![]({{ lsio_microbadger_badge_version_url }}/{{ project_name }}.svg)]({{ lsio_microbadger_image_url }}/{{ project_name }} "{{ lsio_microbadger_link_desc }}")
-[![]({{ lsio_microbadger_badge_image_url }}/{{ project_name }}.svg)]({{ lsio_microbadger_image_url }}/{{ project_name }} "{{ lsio_microbadger_link_desc }}")
-![Docker Pulls]({{ lsio_shieldsio_pull_count_url }}/{{ project_name }}.svg)
-![Docker Stars]({{ lsio_shieldsio_stars_count_url }}/{{ project_name }}.svg)
-[![Build Status]({{ lsio_ci_url }}/buildStatus/icon?job=Docker-Pipeline-Builders/docker-{{ project_name }}/master)]({{ lsio_ci_url }}/job/Docker-Pipeline-Builders/job/docker-{{ project_name }}/job/master/)
-[![]({{ lsio_object_url }}/linuxserver/{{ project_name }}/latest/badge.svg)]({{ lsio_object_url }}/linuxserver/{{ project_name }}/latest/index.html)
+[![GitHub Release]({{ lsio_shieldsio_github_release }})]({{ project_lsio_github_repo_url }}/releases)
+[![MicroBadger Layers]({{ lsio_shieldsio_microbadger_layers }})]({{ lsio_microbadger_url }}/{{ project_name }} "{{ lsio_microbadger_desc }}")
+[![MicroBadger Size]({{ lsio_shieldsio_microbadger_size }})]({{ lsio_microbadger_url }}/{{ project_name }} "{{ lsio_microbadger_desc }}")
+[![Docker Pulls]({{ lsio_shieldsio_docker_pulls }})]({{ project_lsio_docker_hub_url }}/{{ project_name }})
+[![Docker Stars]({{ lsio_shieldsio_docker_stars }})]({{ project_lsio_docker_hub_url }}/{{ project_name }})
+[![Build Status]({{ lsio_ci_badge }})]({{ lsio_ci_url }}/job/Docker-Pipeline-Builders/job/docker-{{ project_name }}/job/master/)
+[![]({{ lsio_object_url }}/{{ lsio_project_name_short }}/{{ project_name }}/latest/badge.svg)]({{ lsio_object_url }}/{{ lsio_project_name_short }}/{{ project_name }}/latest/index.html)
 
 {{ project_blurb }}
 {% if project_blurb_optional_extras_enabled %}
@@ -17,7 +17,7 @@
 
 ## Supported Architectures
 
-Our images support multiple architectures such as `x86-64`, `arm64` and `armhf`. We utilise the docker manifest for multi-platform awareness. More information is available from docker [here](https://github.com/docker/distribution/blob/master/docs/spec/manifest-v2-2.md#manifest-list) and our announcement [here](https://blog.linuxserver.io/2019/02/21/the-lsio-pipeline-project/). 
+Our images support multiple architectures such as `x86-64`, `arm64` and `armhf`. We utilise the docker manifest for multi-platform awareness. More information is available from docker [here](https://github.com/docker/distribution/blob/master/docs/spec/manifest-v2-2.md#manifest-list) and our announcement [here]({{ lsio_blog_url }}/2019/02/21/the-lsio-pipeline-project/).
 
 Simply pulling `{{ lsio_project_name_short }}/{{ project_name }}` should retrieve the correct image for your arch, but you can also pull specific arch images via tags.
 
@@ -344,11 +344,11 @@ This snippet has been tested with {{ lsio_project_name|capitalize}}'s [Let's Enc
 
 ## Support Info
 
-* Shell access whilst the container is running: 
+* Shell access whilst the container is running:
   * `docker exec -it {{ project_name }} /bin/bash`
-* To monitor the logs of the container in realtime: 
+* To monitor the logs of the container in realtime:
   * `docker logs -f {{ project_name }}`
-* Container version number 
+* Container version number
   * `docker inspect -f {% raw %}'{{ index .Config.Labels "build_version" }}'{% endraw %} {{ project_name }}`
 * Image version number
   * `docker inspect -f {% raw %}'{{ index .Config.Labels "build_version" }}'{% endraw %} {{ lsio_project_name_short }}/{{ project_name }}`
